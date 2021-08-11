@@ -14,7 +14,7 @@ app.use(express.json());
  * Root endpoint
  */
 app.get('/', function(req, res) {
-    res.send("RESTFful API for Brokerbay");
+    res.send("RESTFful API for the hatchways assessment \n Endpoints: /api/ping /api/posts");
 });
 
 /**
