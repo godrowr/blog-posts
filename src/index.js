@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 const axios = require('axios');
 const { response } = require('express');
+const request = require('request')
 
 app.set('port', port);
 app.use(express.json());
@@ -14,7 +15,7 @@ app.use(express.json());
  * Root endpoint
  */
 app.get('/', function(req, res) {
-    res.send("RESTFful API for the hatchways assessment \n Endpoints: /api/ping /api/posts");
+    res.send("RESTFful API for a hatchway's assessment \n Endpoints: /api/ping /api/posts");
 });
 
 /**
@@ -44,20 +45,26 @@ app.get('/api/posts', (req, res) => {
 
     url = "https://api.hatchways.io/assessment/blog/posts";
 
-    if (tag == null && tags == null) { return res.send({error: "Tags parameter is required"});} 
-    else if (tags != null) { //or if tag array has a comma in it. 
+    if (tag == null && tags == null) { 
+        res.status(400)
+        return res.send({error: "Tags parameter is required"});
+    }  else if (tags != null) { //or if tag array has a comma in it. 
         tag_array = tags.split(',');
-    } else {
+    }  else {
         tag_array[0] = tag
     }
 
-    if (sortBy != null && !(sortBy == "id" || sortBy == "reads" || sortBy == "likes" || sortBy == "popularity")) 
-    { return res.send({ error: "sortBy parameter is invalid"});}
-    else if (sortBy == null) { sortBy = "id";}
+    if (sortBy != null && !(sortBy == "id" || sortBy == "reads" || sortBy == "likes" || sortBy == "popularity")) { 
+        res.status(400)
+        return res.send({ error: "sortBy parameter is invalid"});
+    } else if (sortBy == null) { 
+        sortBy = "id";
+    }
     
-    if (direction != null && !(direction == "desc" || direction == "asc"))
-    { return res.send({ error: "direction parameter is invalid"});}
-    else if (direction == null) { direction = "asc"; }
+    if (direction != null && !(direction == "desc" || direction == "asc")){ 
+        res.status(400)
+        return res.send({ error: "direction parameter is invalid"});
+    } else if (direction == null) { direction = "asc"; }
 
     for (let i =0; i < tag_array.length; i++){
         url_array[i] = axios.get(url + "?tag=" + tag_array[i] + "&sortBy=" + sortBy + "&direction=" + direction)
@@ -67,7 +74,6 @@ app.get('/api/posts', (req, res) => {
         try {
             const [...responses] = await axios.all(url_array);
             let json = []
-            console.log("Returned JSON results.")
             for (let i = 0; i < responses.length; i++){
                 json = json.concat(responses[i].data.posts)
             }
@@ -78,21 +84,21 @@ app.get('/api/posts', (req, res) => {
 
             filteredJson.sort((a, b) => {
                 if (direction == "asc") {
-                    if (a.likes < b.likes)
+                    if (a[sortBy] < b[sortBy])
                         return -1;
-                    if (a.likes > b.likes)
+                    if (a[sortBy] > b[sortBy])
                         return 1;
                     return 0;
                 } else {
-                    if (a.likes > b.likes)
+                    if (a[sortBy] > b[sortBy])
                         return -1;
-                    if (a.likes < b.likes)
+                    if (a[sortBy] < b[sortBy])
                         return 1;
                     return 0;
                 }
               });
 
-            res.send(filteredJson)
+            res.send({posts: filteredJson})
 
         } catch (err) {
             console.log(err.resp)
@@ -104,3 +110,5 @@ app.get('/api/posts', (req, res) => {
  * Starts listening on port 3000 and informs user.
  */
 app.listen(port, () => console.log(`Listening on port ${port} ..`))
+
+module.exports = app
