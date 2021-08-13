@@ -33,10 +33,11 @@ Exit through crtl-c.
 ## routes
 
 Two routes exist for blogposts:
-http://locahost:3000/api/ping
-http://locahost:3000/api/posts
 
-Note: /api/posts must contain a the query tag.
+- http://locahost:3000/api/ping
+- http://locahost:3000/api/posts
+
+Note: /api/posts must contain the query tag. ('?tag=tech')
 
 ## queries for posts
 
