@@ -26,7 +26,7 @@ Then proceed to http://locahost:3000
 ### testing blogposts
 
 ```
-npm run tests
+npm run test
 ```
 
 Exit through crtl-c.
