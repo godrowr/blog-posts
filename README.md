@@ -1,4 +1,4 @@
-# blogposts
+# blog-posts
 
 A RESTful API built using NodeJS, Express, Axios, request. (index.js)
 Tested with Jest and Supertest. (index.test.js)
