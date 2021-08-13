@@ -3,16 +3,19 @@ const supertest = require('supertest')
 const app = require('./index')
 const request = supertest(app)
 
+const ERROR = 400; const OK = 200;
 
-it('Testing to see if Jest works', () => {
-    expect(1).toBe(1)
-  })
 
+it('Testing to see if Jest works', () => {expect(1).toBe(1)})
+
+/**
+ * Tests for GET /api/ping
+ */
 describe("GET /api/ping", () => {
     describe("To check if destination url is up.", () => {
         it("Should respond with a 200 status code.", async () => {
             const response = await request.get("/api/ping")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(ERROR)
             expect(response.body.success).toBe(true)
         })
     })
@@ -26,6 +29,9 @@ describe("GET /api/ping", () => {
 
 })
 
+/**
+ * Tests for GET /api/posts
+ */
 describe("GET /api/posts", () => {
 
     describe("To check if json format is in use.", () => {
@@ -39,14 +45,14 @@ describe("GET /api/posts", () => {
         it("Should specify 'Tags parameter is required", async () => {
             const response = await request.get("/api/posts")
             expect(response.body.error).toEqual(expect.stringContaining('Tags parameter is required'))
-            expect(response.statusCode).toBe(400)
+            expect(response.statusCode).toBe(ERROR)
         })
     })
 
     describe("To call /api/posts with tag = tech.", () => {
         it("Should return with posts containing tag 'tech'", async () => {
             const response = await request.get("/api/posts?tag=tech")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.posts).toBeInstanceOf(Array)
             expect((response.body.posts[0].tags).includes('tech')).toBeTruthy()
             expect((response.body.posts[1].tags).includes('tech')).toBeTruthy()
@@ -57,7 +63,7 @@ describe("GET /api/posts", () => {
     describe("To call /api/posts with tag = health.", () => {
         it("Should return with posts containing tag 'health'", async () => {
             const response = await request.get("/api/posts?tag=health")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.posts).toBeInstanceOf(Array)
             expect((response.body.posts[0].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[1].tags).includes('health')).toBeTruthy()
@@ -68,7 +74,7 @@ describe("GET /api/posts", () => {
     describe("To call /api/posts with tags = tech,health.", () => {
         it("Should return with posts containing tag 'health' and/or 'tech'", async () => {
             const response = await request.get("/api/posts?tags=tech,health")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.posts).toBeInstanceOf(Array)
             expect((response.body.posts[0].tags).includes('tech') || (response.body.posts[0].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[1].tags).includes('tech') || (response.body.posts[1].tags).includes('health')).toBeTruthy()
@@ -102,7 +108,7 @@ describe("GET /api/posts", () => {
     describe("To call /api/posts with valid direction = desc", () => {
         it("Should return results in descending order by id", async () => {
             const response = await request.get("/api/posts?tags=tech&direction=desc")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.posts[0].id).toBeGreaterThanOrEqual(response.body.posts[1].id)
             expect(response.body.posts[1].id).toBeGreaterThanOrEqual(response.body.posts[2].id)
         })
@@ -111,7 +117,7 @@ describe("GET /api/posts", () => {
     describe("To call /api/posts with valid direction = asc", () => {
         it("Should return results in ascending order by id", async () => {
             const response = await request.get("/api/posts?tags=tech&direction=asc")
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.posts[0].id).toBeLessThanOrEqual(response.body.posts[1].id)
             expect(response.body.posts[1].id).toBeLessThanOrEqual(response.body.posts[2].id)
         })
@@ -121,7 +127,7 @@ describe("GET /api/posts", () => {
         it("Should return with posts containing tag 'health' and/or 'startups' sorted by popularity", async () => {
             const response = await request.get("/api/posts?tags=startups,health&sortBy=popularity")
             expect(response.body.posts).toBeInstanceOf(Array)
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect((response.body.posts[0].tags).includes('startups') || (response.body.posts[0].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[1].tags).includes('startups') || (response.body.posts[1].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[2].tags).includes('startups') || (response.body.posts[2].tags).includes('health')).toBeTruthy()
@@ -134,7 +140,7 @@ describe("GET /api/posts", () => {
         it("Should return with posts containing tag 'health' and/or 'tech', sortBy = likes, direction = desc", async () => {
             const response = await request.get("/api/posts?tags=tech,health&sortBy=likes&direction=desc")
             expect(response.body.posts).toBeInstanceOf(Array)
-            expect(response.statusCode).toBe(200)
+            expect(response.statusCode).toBe(OK)
             expect((response.body.posts[0].tags).includes('tech') || (response.body.posts[0].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[1].tags).includes('tech') || (response.body.posts[1].tags).includes('health')).toBeTruthy()
             expect((response.body.posts[2].tags).includes('tech') || (response.body.posts[2].tags).includes('health')).toBeTruthy()

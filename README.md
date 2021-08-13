@@ -5,8 +5,10 @@ Tested with Jest and Supertest. (index.test.js)
 
 ### installing blogposts
 
+From github.
+
 ```
-git clone
+git clone https://github.com/godrowr/blogposts.git
 ```
 
 ### running blogposts
@@ -26,6 +28,8 @@ Then proceed to http://locahost:3000
 npm run tests
 ```
 
+Exit through crtl-c.
+
 ## routes
 
 Two routes exist for blogposts:
@@ -39,7 +43,8 @@ Note: /api/posts must contain a the query tag.
 #### tag
 
 http://locahost:3000/api/posts?tag=tech
-tag = { science, culture, tech, health, startups, history ...}
+
+- tag = { science, culture, tech, health, startups, history ...}
 
 ##### tags
 
@@ -49,10 +54,12 @@ http://locahost:3000/api/posts?tags=tech,health
 #### sortBy
 
 http://locahost:3000/api/posts?tags=tech,health&sortBy=likes
-sortBy = {likes, id, reads, popularity}
+
+- sortBy = {likes, id, reads, popularity}
 
 #### direction
 
 http://locahost:3000/api/posts?tag=tech&direction=asc
-direction = {asc, desc}
-Where 'asc' is ascending order and 'desc' is descending order.
+
+- direction = {asc, desc}
+  Where 'asc' is ascending order and 'desc' is descending order.
