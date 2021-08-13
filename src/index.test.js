@@ -15,15 +15,8 @@ describe("GET /api/ping", () => {
     describe("To check if destination url is up.", () => {
         it("Should respond with a 200 status code.", async () => {
             const response = await request.get("/api/ping")
-            expect(response.statusCode).toBe(ERROR)
+            expect(response.statusCode).toBe(OK)
             expect(response.body.success).toBe(true)
-        })
-    })
-
-    describe("To check if json format is in use.", () => {
-        it("Should specify json", async () => {
-            const response = await request.get("/api/ping")
-            expect(response.header['content-type']).toEqual(expect.stringContaining('json'))
         })
     })
 
@@ -37,6 +30,7 @@ describe("GET /api/posts", () => {
     describe("To check if json format is in use.", () => {
         it("Should specify json:", async () => {
             const response = await request.get("/api/posts?tag=tech")
+            expect(response.statusCode).toBe(OK)
             expect(response.header['content-type']).toEqual(expect.stringContaining('json'))
         })
     })
@@ -49,14 +43,14 @@ describe("GET /api/posts", () => {
         })
     })
 
-    describe("To call /api/posts with tag = tech.", () => {
-        it("Should return with posts containing tag 'tech'", async () => {
-            const response = await request.get("/api/posts?tag=tech")
+    describe("To call /api/posts with tag = culture.", () => {
+        it("Should return with posts containing tag 'culture'", async () => {
+            const response = await request.get("/api/posts?tag=culture")
             expect(response.statusCode).toBe(OK)
             expect(response.body.posts).toBeInstanceOf(Array)
-            expect((response.body.posts[0].tags).includes('tech')).toBeTruthy()
-            expect((response.body.posts[1].tags).includes('tech')).toBeTruthy()
-            expect((response.body.posts[2].tags).includes('tech')).toBeTruthy()
+            expect((response.body.posts[0].tags).includes('culture')).toBeTruthy()
+            expect((response.body.posts[1].tags).includes('culture')).toBeTruthy()
+            expect((response.body.posts[2].tags).includes('culture')).toBeTruthy()
         })
     })
 
