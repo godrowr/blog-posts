@@ -9,6 +9,8 @@ From github.
 
 ```
 git clone https://github.com/godrowr/blogposts.git
+cd blogposts
+npm install
 ```
 
 ### running blogposts
@@ -16,7 +18,6 @@ git clone https://github.com/godrowr/blogposts.git
 Inside your favourite terminal, do:
 
 ```
-cd blogposts
 node src
 ```
 

@@ -51,9 +51,9 @@ app.get('/api/ping', cache(10), (req, res) => {
     var url = "https://api.hatchways.io/assessment/blog/posts?tag=tech";
     request(url, (err,resp,body) => {
         if (resp.statusCode == OK) {
-            res.send({ success: true});
+            return res.json({ success: true});
         } else {
-            res.send({ success: false});
+            return res.json({ success: false});
         }
     })
 });
@@ -103,7 +103,7 @@ app.get('/api/posts', cache(10), (req, res) => {
     //tag query validation, default values and set up.
     if (tag == null && tags == null) { 
         res.status(ERROR);
-        return res.send({error: "Tags parameter is required"});
+        return res.json({error: "Tags parameter is required"});
     }  else if (tags != null) { 
         tagArray = tags.split(','); 
     }  else {
@@ -113,7 +113,7 @@ app.get('/api/posts', cache(10), (req, res) => {
     //sortBy query validation, default values and set up.
     if (sortBy != null && !(sortBy === "id" || sortBy === "reads" || sortBy === "likes" || sortBy === "popularity")) { 
         res.status(ERROR);
-        return res.send({ error: "sortBy parameter is invalid"});
+        return res.json({ error: "sortBy parameter is invalid"});
     } else if (sortBy == null) { 
         sortBy = "id";
     }
@@ -121,7 +121,7 @@ app.get('/api/posts', cache(10), (req, res) => {
     //direction query validation, default values and set up.
     if (direction != null && !(direction === "desc" || direction === "asc")){ 
         res.status(ERROR);
-        return res.send({ error: "direction parameter is invalid"});
+        return res.json({ error: "direction parameter is invalid"});
     } else if (direction == null) { 
         direction = "asc"; 
     }
@@ -152,7 +152,7 @@ app.get('/api/posts', cache(10), (req, res) => {
             filteredJson.sort(sortByQuery(sortBy, direction));
 
             //outputing final result
-            res.send({posts: filteredJson});
+            res.json({posts: filteredJson});
 
         } catch (err) {
             //incase of any unhandled error. 
